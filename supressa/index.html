@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta property="og:title" content="Nossa História ❤️">
+    <meta property="og:description" content="Tenho uma surpresa para você...">
+    <meta property="og:type" content="website">
+
+    <title>Para a minha garota de amarelo</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #000;
+            overflow: hidden; 
+            position: relative;
+        }
+
+        /* --- CONTAINER DOS CORAÇÕES --- */
+        #container-coracoes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none; 
+            z-index: 1; 
+        }
+
+        .coracao-animado {
+            position: absolute;
+            bottom: -10%;
+            animation: voar linear forwards;
+            opacity: 0.6;
+            filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.5));
+        }
+
+        @keyframes voar {
+            0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-120vh) rotate(360deg) scale(1.5); opacity: 0; }
+        }
+
+        /* --- TELA INICIAL --- */
+        #telaInicial {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease, transform 1s ease;
+            text-align: center;
+            padding: 30px;
+        }
+
+        #telaInicial h1 {
+            font-family: 'Dancing Script', cursive;
+            color: #d48b00;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .caixa-mensagem {
+            background-color: #f8b500;
+            color: black;
+            padding: 25px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            margin-bottom: 40px; 
+        }
+
+        .caixa-mensagem p {
+            color: black;
+            font-size: 18px;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        #btnAbrir {
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3);
+            animation: pulsar 2s infinite;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        @keyframes pulsar {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255, 71, 87, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
+        }
+
+        /* --- CARROSSEL --- */
+        .carrossel {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory; 
+            height: 100vh;
+            scroll-behavior: smooth;
+            opacity: 0; 
+            transition: opacity 1s ease;
+            z-index: 10; 
+            position: relative;
+        }
+
+        .carrossel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .slide {
+            flex: 0 0 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            scroll-snap-align: center;
+            padding: 20px;
+        }
+
+        .polaroid {
+            width: 85%;
+            max-width: 320px;
+            background: #ffffff;
+            padding: 15px 15px 20px 15px; 
+            border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+
+        .polaroid img {
+            width: 100%;
+            aspect-ratio: 3/4; 
+            object-fit: cover;
+            border-radius: 4px;
+            background-color: #f0f0f0; 
+        }
+
+        .legenda-foto {
+            font-family: 'Dancing Script', cursive;
+            color: #4a4a4a;
+            font-size: 24px;
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        .texto-box {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(10px); 
+            padding: 25px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+
+        .texto-box h2 {
+            font-family: 'Dancing Script', cursive;
+            color: #d48b00; 
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .texto-box p {
+            color: #4a4a4a;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* --- BOTÃO DO WHATSAPP --- */
+        .btn-whatsapp {
+            display: inline-block;
+            background-color: #25D366; 
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            margin-top: 20px; /* Separa do texto */
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .btn-whatsapp:active {
+            transform: scale(0.95);
+        }
+
+        .arraste-indicador {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #d48b00;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: piscarArrastar 2s infinite;
+            z-index: 100;
+            opacity: 0; 
+            transition: opacity 1s ease;
+        }
+
+        @keyframes piscarArrastar {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-40%, 0); }
+        }
+
+        .inclina-dir { transform: rotate(3deg); }
+        .inclina-esq { transform: rotate(-3deg); }
+    </style>
+</head>
+<body>
+
+    <div id="container-coracoes"></div>
+
+    <div id="telaInicial">
+        <h1>Surpresa...</h1>
+        <div class="caixa-mensagem">
+            <p>Já que eu sou garoto de programa, fiz um presente pra você!❤️</p>
+        </div>
+        <button id="btnAbrir">Open</button>
+    </div>
+
+    <div class="arraste-indicador" id="indicadorArrastar">
+        Deslize para o lado ➔
+    </div>
+
+    <div class="carrossel" id="meuCarrossel">
+        
+        <div class="slide">
+            <div class="polaroid inclina-dir">
+                <img src="01-cinema.jpg" alt="No cinema">
+                <p class="legenda-foto">Primeiro cineminha...</p>
+            </div>
+            <div class="texto-box">
+                <h2>Aqui começou tudo.</h2>
+                <p>Foi lá assistindo Gato de Botas e nos beijando tudo errado, que eu me liguei que você era alguém que eu gostaria de qualquer maneira. (mesmo sendo muito chatinha)</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="polaroid inclina-esq">
+                <img src="02-pedido.jpg" alt="O Pedido">
+                <p class="legenda-foto">O dia do "sim", a primeira promessa. 💛</p>
+            </div>
+            <div class="texto-box">
+                <h2>O Pedido</h2>
+                <p>O dia em que tomei coragem (pensei tanto que até esqueci a aliança). Mesmo muito nervoso e sem nunca ter feito aquilo, criei coragem pra pedir e ouvir o seu "sim" deixou tudo mais leve (momento gay).</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="polaroid inclina-dir">
+                <img src="03-viagem.jpg" alt="Primeira Viagem">
+                <p class="legenda-foto">Primeira viagem ( de muitas)</p>
+            </div>
+            <div class="texto-box">
+                <h2>A cidade que vamos morar :p</h2>
+                <p>Viajar é top, mas viajar com você é fazer valer a pena cada gasto e cada toque do alarme 5 HORAS DA MANHÃ. Um dos dias mais felizes da minha vida.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="polaroid inclina-esq">
+                <img src="04-jogo-mengao.jpg" alt="Jogo do Mengão">
+                <p class="legenda-foto">Jogo do Mengão!!!!</p>
+            </div>
+            <div class="texto-box">
+                <h2>Mengão e a Princesa</h2>
+                <p>Entrar no estádio dos sonhos, torcer com a maior torcida do Brasil e ter do lado o maior amor do mundo é com certeza muito foda! (apesar de o Flamengo ter empatado)</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="polaroid inclina-dir">
+                <img src="05-lazer.jpg" alt="Dia de Lazer">
+                <p class="legenda-foto">Dia de piscininha :P.</p>
+            </div>
+            <div class="texto-box">
+                <h2>Banho do sábado</h2>
+                <p>Apesar de você não gostar muito de água, esses momentos com você são muito bons e um dos melhores. Tem que aprender a nadar, amor :P</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="polaroid inclina-esq">
+                <img src="06-presente.jpg" alt="O Presente">
+                <p class="legenda-foto">Presente meu.</p>
+            </div>
+            <div class="texto-box">
+                <h2>Surpresinha</h2>
+                <p>Esconder esse buquê aí foi nada fácil no dia, mas valeu a pena ver você com esse sorriso que eu sempre dei valor (Por isso dei mais uns buquês depois :P).</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="polaroid inclina-dir">
+                <img src="07-sorriso.png" alt="O Sorriso">
+                <p class="legenda-foto">O maldito sorriso</p>
+            </div>
+            <div class="texto-box">
+                <h2>"Manda foto sorrindo"</h2>
+                <p>Se tem algo que amo além de ver o Flamengo jogar, é com certeza ir dormir e ver esse seu sorriso que eu amo muito e sempre quero ser um dos motivos do mesmo.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="polaroid inclina-esq">
+                <img src="08-segviagen.jpg" alt="Segunda Viagem">
+                <p class="legenda-foto">ERRIJOTA.</p>
+            </div>
+            <div class="texto-box">
+                <h2>Mais quilômetros rodados</h2>
+                <p>Mais uma viagem e a certeza de que eu iria até pra Índia se fosse com você, certeza que seria o lugar mais lindo do mundo.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="polaroid inclina-dir">
+                <img src="09-restaurante-rj.jpg" alt="Restaurante no RJ">
+                <p class="legenda-foto">Noites cariocas :P.</p>
+            </div>
+            <div class="texto-box">
+                <h2>Jantar do balacobaco </h2>
+                <p>Aquele lugar diferente ($$$) e a experiência inesquecível de jantar com a minha princesa, conversar sobre tudo e fazer pictures lindas.</p>
+            </div>
+        </div>
+
+        <div class="slide" id="ultimo-slide">
+            <div class="polaroid inclina-esq">
+                <img src="10-diamengao.jpg" alt="Dia de Mengão">
+                <p class="legenda-foto">Pra sempre a gente.</p>
+            </div>
+            <div class="texto-box">
+                <h2>Amor da minha vida</h2>
+                <p>Feliz aniversário, minha princesa. O seu amor foi o único que acordou minha alma e faz com que eu avance, o amor que planta um fogo no coração e traz paz pra minha mente (às vezes) e espero dar para você o mesmo, pra sempre. Amo você, Wesley. </p>
+                
+                <a href="https://wa.me/5592992234936?text=Terminei%20de%20ver%20a%20surpresa!%20Vem%20aqui%20receber%20seu%20beijo%2C%20seu%20garoto%20de%20programa%20favorito%20%E2%9D%A4%EF%B8%8F" target="_blank" class="btn-whatsapp">agradecer com beijo? 😘</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const btnAbrir = document.getElementById('btnAbrir');
+        const telaInicial = document.getElementById('telaInicial');
+        const carrossel = document.getElementById('meuCarrossel');
+        const indicador = document.getElementById('indicadorArrastar');
+        const containerCoracoes = document.getElementById('container-coracoes');
+        let arrastou = false;
+
+        // LÓGICA DOS CORAÇÕES FLUTUANTES
+        function criarCoracao() {
+            const coracao = document.createElement('div');
+            coracao.classList.add('coracao-animado');
+            
+            const emojis = ['💛', '🤍', '✨', '💖', '💝', '💫'];
+            coracao.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            coracao.style.left = Math.random() * 100 + 'vw';
+            coracao.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            
+            const duracao = Math.random() * 4 + 4; 
+            coracao.style.animationDuration = duracao + 's';
+            
+            containerCoracoes.appendChild(coracao);
+            
+            setTimeout(() => {
+                coracao.remove();
+            }, duracao * 1000);
+        }
+
+        btnAbrir.addEventListener('click', () => {
+            telaInicial.style.opacity = '0';
+            telaInicial.style.transform = 'scale(1.1)';
+            
+            setTimeout(() => {
+                telaInicial.style.display = 'none';
+                carrossel.style.opacity = '1';
+                indicador.style.opacity = '1';
+                
+                setInterval(criarCoracao, 150); 
+            }, 1000);
+        });
+
+        carrossel.addEventListener('scroll', () => {
+            if (!arrastou) {
+                indicador.style.opacity = '0';
+                setTimeout(() => {
+                    indicador.style.display = 'none';
+                }, 500); 
+                arrastou = true;
+            }
+        });
+
+        // LÓGICA DOS FOGOS DE ARTIFÍCIO NO ÚLTIMO SLIDE
+        const ultimoSlide = document.getElementById('ultimo-slide');
+        let fogosDisparados = false;
+
+        // O IntersectionObserver fica "vigiando" quando o último slide aparece na tela
+        const observer = new IntersectionObserver((entries) => {
+            // Se o slide 10 aparecer na tela e os fogos ainda não tiverem sido disparados
+            if(entries[0].isIntersecting && !fogosDisparados) {
+                fogosDisparados = true;
+                dispararFogos();
+            }
+        }, { threshold: 0.5 }); // Dispara quando metade do slide estiver visível
+
+        observer.observe(ultimoSlide);
+
+        function dispararFogos() {
+            var duration = 4 * 1000; // Duração de 4 segundos
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
+
+            function randomInRange(min, max) {
+              return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                var particleCount = 50 * (timeLeft / duration);
+                
+                // Fogos configurados com as cores do Flamengo (Vermelho/Preto) e Amarelo!
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }, 
+                    colors: ['#ff0000', '#000000', '#f8b500', '#ffffff'] 
+                }));
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }, 
+                    colors: ['#ff0000', '#000000', '#f8b500', '#ffffff'] 
+                }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>
