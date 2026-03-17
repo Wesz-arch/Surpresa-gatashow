@@ -62,7 +62,6 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            height: 100dvh; /* Adaptação mobile */
             background-color: #000;
             display: flex;
             flex-direction: column;
@@ -126,7 +125,6 @@
             overflow-x: auto;
             scroll-snap-type: x mandatory; 
             height: 100vh;
-            height: 100dvh; /* Adaptação mobile */
             scroll-behavior: smooth;
             opacity: 0; 
             transition: opacity 1s ease;
@@ -141,24 +139,22 @@
         .slide {
             flex: 0 0 100vw;
             height: 100vh;
-            height: 100dvh; /* Adaptação mobile */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             scroll-snap-align: center;
-            scroll-snap-stop: always; /* FREIO: Obriga a parar em cada foto */
-            padding: 15px;
+            padding: 20px;
         }
 
         .polaroid {
-            width: 75%; /* Um pouquinho menor pra caber na tela */
-            max-width: 280px;
+            width: 85%;
+            max-width: 320px;
             background: #ffffff;
-            padding: 12px 12px 15px 12px; 
+            padding: 15px 15px 20px 15px; 
             border-radius: 8px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-            margin-bottom: 15px; /* Menos margem em baixo */
+            margin-bottom: 30px;
         }
 
         .polaroid img {
@@ -172,17 +168,17 @@
         .legenda-foto {
             font-family: 'Dancing Script', cursive;
             color: #4a4a4a;
-            font-size: 20px; /* Fonte ajustada */
+            font-size: 24px;
             text-align: center;
-            margin-top: 10px;
+            margin-top: 12px;
         }
 
         .texto-box {
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(10px); 
-            padding: 15px 20px; /* Mais enxuto */
+            padding: 25px;
             border-radius: 20px;
-            width: 95%;
+            width: 90%;
             max-width: 400px;
             text-align: center;
             box-shadow: 0 8px 20px rgba(0,0,0,0.05);
@@ -191,14 +187,14 @@
         .texto-box h2 {
             font-family: 'Dancing Script', cursive;
             color: #d48b00; 
-            font-size: 26px; /* Ajuste para mobile */
-            margin-bottom: 5px;
+            font-size: 32px;
+            margin-bottom: 10px;
         }
 
         .texto-box p {
             color: #4a4a4a;
-            font-size: 13.5px; /* Fonte levemente menor para caber textos longos */
-            line-height: 1.4;
+            font-size: 15px;
+            line-height: 1.6;
         }
 
         /* --- BOTÃO DO WHATSAPP --- */
@@ -207,13 +203,12 @@
             background-color: #25D366; 
             color: white;
             text-decoration: none;
-            padding: 10px 20px;
+            padding: 12px 25px;
             border-radius: 25px;
             font-weight: 600;
-            margin-top: 15px; 
+            margin-top: 20px; /* Separa do texto */
             box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
             transition: transform 0.2s;
-            font-size: 14px;
         }
 
         .btn-whatsapp:active {
@@ -372,7 +367,7 @@
                 <h2>Amor da minha vida</h2>
                 <p>Feliz aniversário, minha princesa. O seu amor foi o único que acordou minha alma e faz com que eu avance, o amor que planta um fogo no coração e traz paz pra minha mente (às vezes) e espero dar para você o mesmo, pra sempre. Amo você, Wesley. </p>
                 
-                <a href="https://wa.me/5592992234936?text=Terminei%20de%20ver%20a%20surpresa!%20Vem%20aqui%20receber%20seu%20beijo%2C%20seu%20garoto%20de%20programa%20favorito%20%E2%9D%A4%EF%B8%8F" target="_blank" class="btn-whatsapp">agradecer com beijo? 😘</a>
+                <a href="https://wa.me/5592992234936?text=Terminei%20de%20ver%20a%20surpresa%20atrasada%2C%20pode%20vim%20receber%20seus%20beijos%20e%20docinhos.%20Meu%20garoto%20de%20programa%20favorito" target="_blank" class="btn-whatsapp">agradecer com beijo? 😘</a>
             </div>
         </div>
 
@@ -386,6 +381,7 @@
         const containerCoracoes = document.getElementById('container-coracoes');
         let arrastou = false;
 
+        // LÓGICA DOS CORAÇÕES FLUTUANTES
         function criarCoracao() {
             const coracao = document.createElement('div');
             coracao.classList.add('coracao-animado');
@@ -429,20 +425,23 @@
             }
         });
 
+        // LÓGICA DOS FOGOS DE ARTIFÍCIO NO ÚLTIMO SLIDE
         const ultimoSlide = document.getElementById('ultimo-slide');
         let fogosDisparados = false;
 
+        // O IntersectionObserver fica "vigiando" quando o último slide aparece na tela
         const observer = new IntersectionObserver((entries) => {
+            // Se o slide 10 aparecer na tela e os fogos ainda não tiverem sido disparados
             if(entries[0].isIntersecting && !fogosDisparados) {
                 fogosDisparados = true;
                 dispararFogos();
             }
-        }, { threshold: 0.5 }); 
+        }, { threshold: 0.5 }); // Dispara quando metade do slide estiver visível
 
         observer.observe(ultimoSlide);
 
         function dispararFogos() {
-            var duration = 4 * 1000; 
+            var duration = 4 * 1000; // Duração de 4 segundos
             var animationEnd = Date.now() + duration;
             var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
 
@@ -459,6 +458,7 @@
 
                 var particleCount = 50 * (timeLeft / duration);
                 
+                // Fogos configurados com as cores do Flamengo (Vermelho/Preto) e Amarelo!
                 confetti(Object.assign({}, defaults, { 
                     particleCount, 
                     origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }, 
