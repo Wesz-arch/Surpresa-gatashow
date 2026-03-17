@@ -62,6 +62,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
+            height: 100dvh; /* Adaptação mobile */
             background-color: #000;
             display: flex;
             flex-direction: column;
@@ -125,6 +126,7 @@
             overflow-x: auto;
             scroll-snap-type: x mandatory; 
             height: 100vh;
+            height: 100dvh; /* Adaptação mobile */
             scroll-behavior: smooth;
             opacity: 0; 
             transition: opacity 1s ease;
@@ -139,22 +141,24 @@
         .slide {
             flex: 0 0 100vw;
             height: 100vh;
+            height: 100dvh; /* Adaptação mobile */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             scroll-snap-align: center;
-            padding: 20px;
+            scroll-snap-stop: always; /* FREIO: Obriga a parar em cada foto */
+            padding: 15px;
         }
 
         .polaroid {
-            width: 85%;
-            max-width: 320px;
+            width: 75%; /* Um pouquinho menor pra caber na tela */
+            max-width: 280px;
             background: #ffffff;
-            padding: 15px 15px 20px 15px; 
+            padding: 12px 12px 15px 12px; 
             border-radius: 8px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-            margin-bottom: 30px;
+            margin-bottom: 15px; /* Menos margem em baixo */
         }
 
         .polaroid img {
@@ -168,17 +172,17 @@
         .legenda-foto {
             font-family: 'Dancing Script', cursive;
             color: #4a4a4a;
-            font-size: 24px;
+            font-size: 20px; /* Fonte ajustada */
             text-align: center;
-            margin-top: 12px;
+            margin-top: 10px;
         }
 
         .texto-box {
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(10px); 
-            padding: 25px;
+            padding: 15px 20px; /* Mais enxuto */
             border-radius: 20px;
-            width: 90%;
+            width: 95%;
             max-width: 400px;
             text-align: center;
             box-shadow: 0 8px 20px rgba(0,0,0,0.05);
@@ -187,14 +191,14 @@
         .texto-box h2 {
             font-family: 'Dancing Script', cursive;
             color: #d48b00; 
-            font-size: 32px;
-            margin-bottom: 10px;
+            font-size: 26px; /* Ajuste para mobile */
+            margin-bottom: 5px;
         }
 
         .texto-box p {
             color: #4a4a4a;
-            font-size: 15px;
-            line-height: 1.6;
+            font-size: 13.5px; /* Fonte levemente menor para caber textos longos */
+            line-height: 1.4;
         }
 
         /* --- BOTÃO DO WHATSAPP --- */
@@ -203,12 +207,13 @@
             background-color: #25D366; 
             color: white;
             text-decoration: none;
-            padding: 12px 25px;
+            padding: 10px 20px;
             border-radius: 25px;
             font-weight: 600;
-            margin-top: 20px; /* Separa do texto */
+            margin-top: 15px; 
             box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
             transition: transform 0.2s;
+            font-size: 14px;
         }
 
         .btn-whatsapp:active {
@@ -381,7 +386,6 @@
         const containerCoracoes = document.getElementById('container-coracoes');
         let arrastou = false;
 
-        // LÓGICA DOS CORAÇÕES FLUTUANTES
         function criarCoracao() {
             const coracao = document.createElement('div');
             coracao.classList.add('coracao-animado');
@@ -425,23 +429,20 @@
             }
         });
 
-        // LÓGICA DOS FOGOS DE ARTIFÍCIO NO ÚLTIMO SLIDE
         const ultimoSlide = document.getElementById('ultimo-slide');
         let fogosDisparados = false;
 
-        // O IntersectionObserver fica "vigiando" quando o último slide aparece na tela
         const observer = new IntersectionObserver((entries) => {
-            // Se o slide 10 aparecer na tela e os fogos ainda não tiverem sido disparados
             if(entries[0].isIntersecting && !fogosDisparados) {
                 fogosDisparados = true;
                 dispararFogos();
             }
-        }, { threshold: 0.5 }); // Dispara quando metade do slide estiver visível
+        }, { threshold: 0.5 }); 
 
         observer.observe(ultimoSlide);
 
         function dispararFogos() {
-            var duration = 4 * 1000; // Duração de 4 segundos
+            var duration = 4 * 1000; 
             var animationEnd = Date.now() + duration;
             var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
 
@@ -458,7 +459,6 @@
 
                 var particleCount = 50 * (timeLeft / duration);
                 
-                // Fogos configurados com as cores do Flamengo (Vermelho/Preto) e Amarelo!
                 confetti(Object.assign({}, defaults, { 
                     particleCount, 
                     origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }, 
